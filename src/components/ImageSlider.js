@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 const ImageSlider = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  const images = [
+  
+  const desktopImages = [
     "https://img1.wsimg.com/cdnassets/transform/2640ac6f-d6cf-46e4-8186-2bab99ae0675/komusicmusicianbttemplate_desktop",
     "https://img1.wsimg.com/cdnassets/transform/5be08aac-da26-4a95-816b-e5b5abe1c46b/retailsingleproduct_mobile",
     "https://img1.wsimg.com/cdnassets/transform/c5ec380c-f411-41f0-8d20-eb469ad39b05/koartgallerytemplate1_desktop",
@@ -14,14 +14,20 @@ const ImageSlider = () => {
     "https://img1.wsimg.com/cdnassets/transform/cfb06d21-498d-4421-9355-167d720e015b/kohomehousewarestemplate_desktop"
   ];
 
+  const mobileImages = [
+    "https://img1.wsimg.com/cdnassets/transform/35ced7b2-75c9-42c2-a6be-6ee93c2bcf1e/kobookstoretemplate_mobile",
+    "https://img1.wsimg.com/cdnassets/transform/2fb9af64-ea5d-4624-b7a2-e9e96e4ff7af/kohomehousewarestemplate_mobile",
+    "https://img1.wsimg.com/cdnassets/transform/9f211b73-ad4a-4e0a-9143-56fa6b44531d/koartgallerytemplate1_mobile",
+    "https://img1.wsimg.com/cdnassets/transform/4e212d5c-1c77-4f9d-b62b-3cca33c99ece/komusicmusicianbttemplate_mobile"
+  ];
+
   return (
-    
     <div className="overflow-hidden w-full bg-gray-100 py-6 font-sans">
       <div className="text-center mb-4">
-        <div className="heading text-4xl font-bold">
+        <div className="text-3xl font-bold md:text-4xl">
           <span>Templates designed to sell.</span>
         </div>
-        <div className="sub-heading text-s mt-2">
+        <div className="text-sm mt-2">
           <span>Choose from 100s of designs for every idea and industry.</span>
         </div>
       </div>
@@ -31,12 +37,11 @@ const ImageSlider = () => {
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         style={{
-          width: `${images.length * 150}%`, 
-          animationDuration: "540s" 
+          width: `${desktopImages.length * 150}%`,
+          animationDuration: "540s"
         }}
       >
-        {/* Display original images */}
-        {[...images, ...images].map((src, index) => (
+        {[...(window.innerWidth >= 768 ? desktopImages : mobileImages), ...(window.innerWidth >= 768 ? desktopImages : mobileImages)].map((src, index) => (
           <div key={`${src}-${index}`} className="relative flex-shrink-0">
             <img
               src={src}
@@ -54,8 +59,7 @@ const ImageSlider = () => {
           </div>
         ))}
       </div>
-
-      {/* Browse All Templates Button */}
+      
       <div className="text-center mt-8">
         <button
           className={`px-6 py-3 bg-black text-white font-bold text-xs rounded-lg transition-all duration-300 whitespace-nowrap 

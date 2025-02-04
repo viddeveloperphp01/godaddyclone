@@ -17,6 +17,9 @@ import {
   Image,
   Database,
   ShoppingCart,
+  User,
+  CircleHelp,
+  AlignJustify,
   X,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
@@ -125,14 +128,15 @@ const Mainheader = () => {
         {
           section: "SSL Certificates",
           items: [
-            { icon:  <FileLock2 />, label: "SSL Certificates" },
+            { icon: <FileLock2 />, label: "SSL Certificates" },
             { icon: <Lock />, label: "Managed SSL Certificates" },
           ],
         },
         {
           section: "WEB Security",
-          items: [{ icon: <ShieldCheck />, label: "Website Security" },
-            { label: "Website Security" }
+          items: [
+            { icon: <ShieldCheck />, label: "Website Security" },
+            { label: "Website Security" },
           ],
         },
       ],
@@ -182,10 +186,11 @@ const Mainheader = () => {
 
   // Close dropdown on outside click
   useEffect(() => {
-    const handleClickOutside = (event) =>{
+    const handleClickOutside = (event) => {
       if (!event.target.closest(".dropdown-container")) {
-      setActiveDropdown("");
-    } };
+        setActiveDropdown("");
+      }
+    };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
@@ -193,59 +198,62 @@ const Mainheader = () => {
   const renderDropdown = (content) => (
     <div
       className={`absolute left-0 w-full shadow-lg z-50 transition-all duration-300
-        ${activeDropdown
-          ? "bg-white text-black top-[70px] opacity-100 h-[440px] transform translate-y-0"
-          : "bg-transparent text-white top-[64px] opacity-0 pointer-events-none h-0 transform translate-y-[-20px]"
+        ${
+          activeDropdown
+            ? "bg-white text-black top-[70px] opacity-100 h-[440px] transform translate-y-0"
+            : "bg-transparent text-white top-[64px] opacity-0 pointer-events-none h-0 transform translate-y-[-20px]"
         }`}
     >
       {/* Dropdown Arrow (Visible when active) */}
       <div
         className={`absolute left-10 top-full w-4 h-0 border-l-8 border-r-8 border-b-8 border-transparent 
-          ${activeDropdown ? "border-b-white" : "border-b-transparent"} transition-transform duration-300`}
+          ${
+            activeDropdown ? "border-b-white" : "border-b-transparent"
+          } transition-transform duration-300`}
       />
-      
+
       {/* Content Section */}
       <div
         className={`grid grid-cols-4 text-sm gap-4 p-6 mr-8 ml-8 transition-all duration-300
-          ${activeDropdown ? "transform translate-x-0" : "transform translate-x-[100%] opacity-0"}
+          ${
+            activeDropdown
+              ? "transform translate-x-0"
+              : "transform translate-x-[100%] opacity-0"
+          }
         `}
       >
-    {/* Left Content Section */}
-<div className="col-span-3 grid grid-cols-3 gap-8 mr-8">
-  {content.sections.map((section) => (
-    <div key={section.section}>
-      <h3 className="text-gray-700 font-semibold p-2 rounded-md mb-4">
-        {section.section}
-      </h3>
-      {section.items.map(({ icon, label, tag }) => (
-        <div
-          key={label}
-          className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100  hover:text-purple-600 cursor-pointer transition-all duration-200"
-        >
-          {/* Render icon only if it exists */}
-          {icon && (
-            <span className="flex items-center justify-center w-12 h-12 bg-blue-100 text-black rounded-lg">
-              {icon}
-            </span>
-          )}
-          <span className="text-sm font-medium flex items-center">
-            {label}
-            {tag && (
-              <span className="ml-2 px-2 py-1 text-xs text-purple-600 bg-purple-100 rounded-md">
-                {tag}
-              </span>
-            )}
-          </span>
+        {/* Left Content Section */}
+        <div className="col-span-3 grid grid-cols-3 gap-8 mr-8">
+          {content.sections.map((section) => (
+            <div key={section.section}>
+              <h3 className="text-gray-700 font-semibold p-2 rounded-md mb-4">
+                {section.section}
+              </h3>
+              {section.items.map(({ icon, label, tag }) => (
+                <div
+                  key={label}
+                  className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100  hover:text-purple-600 cursor-pointer transition-all duration-200"
+                >
+                  {/* Render icon only if it exists */}
+                  {icon && (
+                    <span className="flex items-center justify-center w-12 h-12 bg-blue-100 text-black rounded-lg">
+                      {icon}
+                    </span>
+                  )}
+                  <span className="text-sm font-medium flex items-center">
+                    {label}
+                    {tag && (
+                      <span className="ml-2 px-2 py-1 text-xs text-purple-600 bg-purple-100 rounded-md">
+                        {tag}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  ))}
-</div>
 
-
-
-
-  
         {/* Right Image Section */}
         <div className="col-span-1 flex flex-col justify-center group">
           <div className="overflow-hidden rounded-lg items-center shadow-md mb-4">
@@ -262,7 +270,7 @@ const Mainheader = () => {
       </div>
     </div>
   );
-  
+
   const renderSignInDropdown = () => (
     <div className="absolute right-8 mt-6 w-64 bg-white shadow-lg rounded-lg text-black z-50 p-4 top-[64px] ">
       {/* Close Button (X) */}
@@ -295,197 +303,277 @@ const Mainheader = () => {
       ))}
     </div>
   );
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerContentKey, setDrawerContentKey] = useState(null);
+  const drawerContent = dropdownContents[drawerContentKey];
+
+  const handleToggleDrawer = (dropdownKey) => {
+    if (drawerContentKey === dropdownKey && isDrawerOpen) {
+      setIsDrawerOpen(false);
+      setDrawerContentKey(null);
+    } else {
+      setIsDrawerOpen(true);
+      setDrawerContentKey(dropdownKey);
+    }
+  };
   return (
-    <header className="bg-gray-900 text-white flex flex-col h-16 relative">
-      {/* Top Header */}
-      <div className="flex justify-between items-center w-lg gap-2 mr-16 ml-16">
-        {/* Logo Section */}
-        <div className="flex items-center relative space-x-3  fill-white">
-  <img
-    src={go_daddy}
-    alt="GoDaddy"
-    className="h-12 fill-white bg-cover bg-center"
-  />
-  <span className="text-xl  font-bold ">GoDaddy</span>
-  <span className="text-sm absolute -bottom-2 right-0">India</span>
-</div>
+    <div>
+      <div className="w-full bg-gray-900 text-white">
+        <div className="w-full px-4 lg:px-16">
+          <header className="flex flex-col w-full relative">
+            {/* Top Header */}
+            <div className="flex flex-wrap justify-between items-center py-2">
+              {/* Logo Section */}
+              <div className="hidden md:flex items-center space-x-3 relative">
+                <img
+                  src={go_daddy}
+                  alt="GoDaddy"
+                  className="h-12 bg-cover bg-center"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold">GoDaddy</span>
+                  <span className="text-sm absolute -bottom-2 right-0">
+                    India
+                  </span>
+                </div>
+              </div>
+              {/* Logo Section */}
+              <div className="md:hidden flex items-center space-x-3 relative">
+                <AlignJustify
+                  className="cursor-pointer hover:text-gray-400"
+                  size={24}
+                  onClick={() => handleToggleDrawer("domains")} // This will trigger the drawer
 
+                />
+                <img
+                  src={go_daddy}
+                  alt="GoDaddy"
+                  className="h-12 bg-cover bg-center"
+                />
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold">GoDaddy</span>
+                  <span className="text-sm absolute -bottom-2 right-0">
+                    India
+                  </span>
+                </div>
+              </div>
+              {/* Navigation */}
+              <nav className="hidden md:flex  w-[900px]  text-md  font-bold">
+                <div className="relative">
+                  {activeDropdown === "domains" && (
+                    <div className="fixed top-[60px]  inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-sm transition-all duration-300 z-10"></div>
+                  )}
+                </div>
 
-        <nav className="flex  w-[900px]  text-md  font-bold">
-        <div className="relative">
-        {activeDropdown === "domains" && (
-    <div className="fixed top-[60px]  inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-sm transition-all duration-300 z-10"></div>
-  )}
-     </div>
-     
-          <div
-            className={`flex items-center space-x-1 h-10 w-28 px-3 py-3 top-1 text-md cursor-pointer rounded-md relative 
+                <div
+                  className={`flex items-center space-x-1 h-10 w-28 px-3 py-3 top-1 text-md cursor-pointer rounded-md relative 
     ${
       activeDropdown === "domains" ? "bg-white text-black" : "hover:bg-gray-700"
     }
   `}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("domains");
-            }}
-          >
-            <span>Domains</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-300 ${
-                activeDropdown === "domains" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          <div className="relative">
-        {activeDropdown === "websitesHosting" && (
-    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
-  )}
-     </div>
-          <div
-            className={`flex items-center space-x-1 h-10 w-48 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative  ${
-              activeDropdown === "websitesHosting"
-                ? "bg-white text-black"
-                : "hover:bg-gray-700"
-            }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown("domains");
+                  }}
+                >
+                  <span>Domains</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${
+                      activeDropdown === "domains" ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                <div className="relative">
+                  {activeDropdown === "websitesHosting" && (
+                    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
+                  )}
+                </div>
+                <div
+                  className={`flex items-center space-x-1 h-10 w-48 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative  ${
+                    activeDropdown === "websitesHosting"
+                      ? "bg-white text-black"
+                      : "hover:bg-gray-700"
+                  }
   `}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("websitesHosting");
-            }}
-          >
-            <span>Websites and Hosting</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-300 ${
-                activeDropdown === "websitesHosting" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown("websitesHosting");
+                  }}
+                >
+                  <span>Websites and Hosting</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${
+                      activeDropdown === "websitesHosting" ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
 
-          {["Email"].map((item) => (
-            <span
-              key={item}
-              className=" items-center space-x-2  h-10 w-24 px-6 py-2 top-1 text-md  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
-            >
-              {item}
-            </span>
-          ))}
-          <div className="relative">
-        {activeDropdown === "security" && (
-    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
-  )}
-     </div>
-          <div
-            className={`flex items-center space-x-2 h-10 w-28 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative ${
-              activeDropdown === "security"
-                ? "bg-white text-black"
-                : "hover:bg-gray-700"
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("security");
-            }}
-          >
-            <span>Security</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-300 ${
-                activeDropdown === "security" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
-          <div className="relative">
-        {activeDropdown === "marketing" && (
-    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
-  )}
-     </div>
-          <div
-            className={`flex items-center space-x-2 h-10 w-28 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative ${
-              activeDropdown === "marketing"
-                ? "bg-white text-black"
-                : "hover:bg-gray-700"
-            }`}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("marketing");
-            }}
-          >
-            <span>Marketing</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-300 ${
-                activeDropdown === "marketing" ? "rotate-180" : ""
-              }`}
-            />
-          </div>
+                {["Email"].map((item) => (
+                  <span
+                    key={item}
+                    className=" items-center space-x-2  h-10 w-24 px-6 py-2 top-1 text-md  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
+                  >
+                    {item}
+                  </span>
+                ))}
+                <div className="relative">
+                  {activeDropdown === "security" && (
+                    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
+                  )}
+                </div>
+                <div
+                  className={`flex items-center space-x-2 h-10 w-28 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative ${
+                    activeDropdown === "security"
+                      ? "bg-white text-black"
+                      : "hover:bg-gray-700"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown("security");
+                  }}
+                >
+                  <span>Security</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${
+                      activeDropdown === "security" ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                <div className="relative">
+                  {activeDropdown === "marketing" && (
+                    <div className="fixed top-[60px] inset-0 bg-gray-500 bg-opacity-10 backdrop-blur-md transition-all duration-300 z-10"></div>
+                  )}
+                </div>
+                <div
+                  className={`flex items-center space-x-2 h-10 w-28 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative ${
+                    activeDropdown === "marketing"
+                      ? "bg-white text-black"
+                      : "hover:bg-gray-700"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDropdown("marketing");
+                  }}
+                >
+                  <span>Marketing</span>
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-300 ${
+                      activeDropdown === "marketing" ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
 
-          {["Pricing"].map((item) => (
-            <span
-              key={item}
-              className=" items-center space-x-2 h-10 w-24 px-6 py-2 top-1 text-md  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
-            >
-              {item}
-            </span>
-          ))}
-        </nav>
+                {["Pricing"].map((item) => (
+                  <span
+                    key={item}
+                    className=" items-center space-x-2 h-10 w-24 px-6 py-2 top-1 text-md  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </nav>
 
-        {/* Right-side Links */}
-        <div className="flex  items-center relative text-md  font-bold">
-          {["Contact Us"].map((item) => (
-            <span
-              key={item}
-              className="items-center space-x-2  h-10 w-24 px-3 py-3 top-1 text-sm  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
-            >
-              {item}
-            </span>
-          ))}
-          {[ "Help"].map((item) => (
-            <span
-              key={item}
-              className="items-center space-x-2  h-10 w-20 px-3 py-3 top-1 text-sm  font-semibold cursor-pointer rounded-md relative hover:bg-gray-700"
-            >
-              {item}
-            </span>
-          ))}
-          {/* Sign In Dropdown */}
-          <div className="relative">
-            <div
-              className={`flex items-center space-x-2  h-10 w-24 px-3 py-3 top-1 text-sm cursor-pointer rounded-md relative ${
-                activeDropdown === "signIn"
-                  ? "bg-white text-black"
-                  : "hover:bg-gray-700"
-              }`}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleDropdown("signIn");
-              }}
-            >
-              <span>Sign In</span>
-              <ChevronDown
-                size={16}
-                className={`transition-transform duration-300 ${
-                  activeDropdown === "signIn" ? "rotate-180" : ""
-                }`}
-              />
+              {/* Right-side Links */}
+              <div className="hidden md:flex items-center space-x-4">
+                {[{ label: "Contact Us" }, { label: "Help" }].map((item) => (
+                  <span
+                    key={item.label}
+                    className="h-10 px-3 py-2 cursor-pointer rounded-md relative hover:bg-gray-700"
+                  >
+                    {item.label}
+                  </span>
+                ))}
+
+                {/* Sign In Dropdown */}
+                <div className="relative">
+                  <div
+                    className={`flex items-center h-10 px-3 py-2 cursor-pointer rounded-md relative
+                    ${
+                      activeDropdown === "signIn"
+                        ? "bg-white text-black"
+                        : "hover:bg-gray-700"
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleDropdown("signIn");
+                    }}
+                  >
+                    <span>Sign In</span>
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-300 ${
+                        activeDropdown === "signIn" ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {/* Shopping Cart Icon */}
+                <ShoppingCart
+                  className="cursor-pointer hover:text-gray-400"
+                  size={24}
+                />
+              </div>
+
+              {/* Right-side Links */}
+              <div className="md:hidden flex items-center space-x-4">
+                {/* Shopping Cart Icon */}
+                <CircleHelp
+                  className="cursor-pointer hover:text-gray-400"
+                  size={24}
+                />
+                {/* Shopping Cart Icon */}
+                <User
+                  className="cursor-pointer hover:text-gray-400"
+                  size={24}
+                />
+                {/* Shopping Cart Icon */}
+                <ShoppingCart
+                  className="cursor-pointer hover:text-gray-400"
+                  size={24}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Shopping Cart Icon */}
-          <ShoppingCart
-            className="cursor-pointer hover:text-gray-400"
-            size={24}
-          />
+            {/* Dropdown Menus */}
+            {activeDropdown && activeDropdown !== "signIn" && (
+              <div className="w-full absolute left-0 bg-gray-800 text-white z-10">
+                {renderDropdown(dropdownContents[activeDropdown])}
+              </div>
+            )}
+            {activeDropdown === "signIn" && (
+              <div className="w-full absolute left-0 bg-gray-800 text-white z-10">
+                {renderSignInDropdown()}
+              </div>
+
+              
+            )}
+
+            {isDrawerOpen && (
+  <div className="fixed top-0 right-0 w-80 h-full bg-white text-black shadow-lg z-50 transition-transform duration-300 transform translate-x-0">
+    <div className="flex justify-between items-center p-4 border-b">
+      <h2 className="text-lg font-semibold">
+        {drawerContent?.title || "Menu"}
+      </h2>
+      <X className="cursor-pointer" onClick={() => setIsDrawerOpen(false)} />
+    </div>
+    <div className="p-4">
+      <p>{drawerContent?.content}</p>
+    </div>
+  </div>
+)}
+
+
+          </header>
         </div>
       </div>
-
-      {/* Dropdown Menus */}
-      {activeDropdown &&
-        activeDropdown !== "signIn" &&
-        renderDropdown(dropdownContents[activeDropdown])}
-      {activeDropdown === "signIn" && renderSignInDropdown()}
-    </header>
+    </div>
   );
 };
 
-export default Mainheader;
+export default Mainheader;

@@ -69,8 +69,8 @@ function Onward() {
             }}
           ></div>
 
-          {/* Static Overlay Box */}
-          <div className="absolute top-10 right-8 bg-white p-8 max-w-xl min-h-[510px] shadow-lg rounded-lg flex flex-col justify-center space-y-4">
+          {/* Static Overlay Box (Hidden on md) */}
+          <div className="hidden md:block absolute top-10 right-8 bg-white p-8 max-w-xl min-h-[510px] shadow-lg rounded-lg flex flex-col justify-center space-y-4">
             <p className="text-3xl font-semibold leading-tight text-gray-900 mb-12">
               “GoDaddy's Website Builder is <br />
               super-convenient for somebody <br />
@@ -133,6 +133,59 @@ function Onward() {
               </div>
             </div>
           </div>
+{/* New Overlay Box - Mobile View */}
+<div className="md:hidden absolute left-0 bottom-0 right-0 bg-white p-6 shadow-lg  flex flex-col space-y-4">
+  <p className="text-lg font-semibold leading-tight text-gray-900">
+    “GoDaddy's Website Builder is <br />
+    super-convenient for somebody <br />
+    who has an idea of what they're <br />
+    trying to create.”
+  </p>
+
+  {/* Flex Row for Links & Image */}
+  <div className="flex items-center justify-between">
+    <ul className="space-y-2 text-[14px]">
+      <li className="flex items-center space-x-2 cursor-pointer">
+        <Search className="bg-cyan-600 text-white text-xl p-2 rounded-full" />
+        <a
+          href="/#"
+          rel="noopener noreferrer"
+          className="text-gray-700 hover:text-cyan-600 hover:underline"
+        >
+          Domain
+        </a>
+      </li>
+      <li className="flex items-center space-x-2 cursor-pointer">
+        <Store className="bg-cyan-600 text-white text-xl p-2 rounded-full" />
+        <a
+          href="/#"
+          rel="noopener noreferrer"
+          className="text-gray-700 hover:text-cyan-600 hover:underline"
+        >
+          Online Store
+        </a>
+      </li>
+      <li className="flex items-center space-x-2 cursor-pointer">
+        <Shield className="bg-cyan-600 text-white text-xl p-2 rounded-full" />
+        <a
+          href="/#"
+          rel="noopener noreferrer"
+          className="text-gray-700 hover:text-cyan-600 hover:underline"
+        >
+          SSL Certificates
+        </a>
+      </li>
+    </ul>
+
+    {/* Image (Aligned to the Right) */}
+    <img
+      src="https://img1.wsimg.com/cdnassets/transform/bc4b4bee-f709-4f8b-b606-a92a74286ae2/Raheim-Thompson-site"
+      alt="Website Preview"
+      className="w-36 h-24 object-cover rounded-lg shadow-md"
+    />
+  </div>
+</div>
+
         </div>
       </div>
     </div>
